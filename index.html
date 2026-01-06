@@ -1,5 +1,93 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <title>Үйлену тойына шақыру | Дос 1 & Дос 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fafafa;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+        }
+        .lang {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        .hidden {
+            display: none;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Переключатель языка -->
+    <div class="lang">
+        <button type="button" onclick="setLang('kz')">KZ</button>
+        <button type="button" onclick="setLang('ru')">RU</button>
+    </div>
+
+    <!-- Текст -->
+    <h2 id="title"></h2>
+    <p id="text"></p>
+
+    <!-- Форма -->
+    <form id="rsvpForm">
+        <input type="text" id="name">
+        <br><br>
+        <input type="text" id="surname">
+        <br><br>
+
+        <label>
+            <input type="radio" name="answer" value="alone"> 
+        </label><br>
+
+        <label>
+            <input type="radio" name="answer" value="withSomeone"> 
+        </label><br>
+
+        <label>
+            <input type="radio" name="answer" value="notComing"> 
+        </label><br><br>
+
+        <textarea id="comment" class="hidden"></textarea>
+        <br>
+
+        <button type="button" onclick="submitForm()"></button>
+    </form>
+
+    <p id="message"></p>
+
+</div>
+
 <script>
-// Словарь с текстами на двух языках
+// --- Словарь с текстами на двух языках ---
 const texts = {
     kz: {
         title: 'Үйлену тойына шақыру',
@@ -33,22 +121,68 @@ const texts = {
     }
 };
 
-// Функция смены языка
+// --- Текущий язык ---
+let currentLang = 'kz';
+
+// --- Установка языка ---
 function setLang(lang) {
+    currentLang = lang;
     document.getElementById('title').innerText = texts[lang].title;
     document.getElementById('text').innerText = texts[lang].text;
     document.getElementById('name').placeholder = texts[lang].name;
     document.getElementById('surname').placeholder = texts[lang].surname;
-    document.querySelector('input[value="alone"]').parentNode.childNodes[1].nodeValue = texts[lang].alone;
-    document.querySelector('input[value="withSomeone"]').parentNode.childNodes[1].nodeValue = texts[lang].withSomeone;
-    document.querySelector('input[value="notComing"]').parentNode.childNodes[1].nodeValue = texts[lang].notComing;
+
+    const radios = document.getElementsByName('answer');
+    radios[0].parentNode.childNodes[1].nodeValue = texts[lang].alone;
+    radios[1].parentNode.childNodes[1].nodeValue = texts[lang].withSomeone;
+    radios[2].parentNode.childNodes[1].nodeValue = texts[lang].notComing;
+
     document.getElementById('comment').placeholder = texts[lang].comment;
     document.querySelector('button').innerText = texts[lang].button;
+}
+// --- Показ/скрытие комментария ---
+document.getElementsByName('answer').forEach(radio => {
+    radio.addEventListener('change', function() {
+        document.getElementById('comment').classList.toggle('hidden', this.value !== 'withSomeone');
+    });
+});
 
-    // Сохраняем текущий язык для ошибок и сообщений
-    window.currentLang = lang;
+// --- Проверка формы и отправка ---
+function submitForm() {
+    const name = document.getElementById('name').value.trim();
+    const surname = document.getElementById('surname').value.trim();
+    const radios = document.getElementsByName('answer');
+    const comment = document.getElementById('comment').value.trim();
+    const message = document.getElementById('message');
+
+    if(!name || !surname) {
+        message.className = 'error';
+        message.innerText = texts[currentLang].errorName;
+        return;
+    }
+
+    let selected = null;
+    for(let r of radios){
+        if(r.checked) selected = r.value;
+    }
+    if(!selected) {
+        message.className = 'error';
+        message.innerText = texts[currentLang].errorAnswer;
+        return;
+    }
+
+    if(selected === 'withSomeone' && !comment) {
+        message.className = 'error';
+        message.innerText = texts[currentLang].errorComment;
+        return;
+    }
+
+    message.className = 'success';
+    message.innerText = texts[currentLang].success;
 }
 
-// Используем язык по умолчанию
-setLang('kz');
+// --- Инициализация ---
+setLang(currentLang);
 </script>
+</body>
+</html>
