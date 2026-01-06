@@ -1,2 +1,91 @@
 Html
-<h1>Сайт работает</h1>
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8>
+    <title>Үйлену тойы  |  Дос 1 & Дос 2</title>
+    <meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fafafa;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      cursor: pointer;
+    }
+    .lang {
+      text-align: right;
+      margin-bottom: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <!-- Переключатель языка -->
+  <div class="lang>
+    <button onclick=@setLang('kz')>KZ</button>
+    <button onclick=@setLang('ru')>RU</button>
+  </div>
+
+  <!-- Текст (по умолчанию КАЗ) -->
+  <h2 id="title">Үйлену тойына шақыру</h2>
+  <p id="text">
+    Біздің үйлену тойымызға келсеңіздер қуаныштымыз!
+  </p>
+
+  <!-- Форма -->
+  <form>
+    <input type="text" placeholder="Аты">
+    <br><br>
+    <input type="text" placeholder="Тегі">
+    <br><br>
+
+    <label>
+      <input type="radio" name="answer"> Жалғыз келемін
+    </label><br>
+
+    <label>
+      <input type="radio" name="answer"> Біреумен келемін
+    </label><br>
+
+    <label>
+      <input type="radio" name="answer"> Келе алмаймын
+    </label><br>
+
+    <button type="button">Жіберу</button>
+  </form>
+
+</div>
+
+<script>
+function setlang(lang) {
+  if (lang === 'ru') {
+    document.getElementById('title').innerText = 'Приглашение на свадьбу';
+    document.getElementById('text').innerText = 'Мы будем рады видеть вас на нашей свадьбе!';
+  } else {
+    document.getElementById('title').innerText = 'Үйлену тойына шақыру';
+    document.getElementById('title').innerText = 'Біздің үйлену тойымызға келсеңіздер қуаныштымыз!';
+  }
+}
+</script>
+</body>
+</html>
